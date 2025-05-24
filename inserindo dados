@@ -1,0 +1,81 @@
+CREATE DATABASE Fabrica;
+GO
+
+USE Fabrica;
+GO
+
+-- INSERIRNDO O SCRIPT DO AVA
+
+CREATE TABLE Empregado (
+	EmpCoodigo INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	EmpNome VARCHAR(200) NOT NULL,
+	EmpTelefone VARCHAR(15) NOT NULL,
+	EmpEmail VARCHAR(100) NOT NULL,
+	EmpCpf VARCHAR(11) NOT NULL,
+	EmpDataNascimento DATETIME NOT NULL
+);
+
+CREATE TABLE Produto (
+	ProCodigo INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	ProNome VARCHAR(200) NOT NULL,
+	ProCodigoBarras VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Producao (
+	ProducaoID INT IDENTITY(1,1) PRIMARY KEY,
+	EmpCodigoEmpregado INT,
+	DataProducao DATE NOT NULL,
+	Quantidade INT NOT NULL,
+	FOREIGN KEY (EmpCodigoEmpregado) REFERENCES Empregado(EmpCoodigo)
+);
+
+CREATE TABLE ProducaoProduto (
+	CodigoProduto INT,
+	CodigoProducao INT,
+	FOREIGN KEY (CodigoProduto) REFERENCES Produto(ProCodigo),
+	FOREIGN KEY (CodigoProducao) REFERENCES Producao(ProducaoID)
+);
+
+-- INSERINDO OS DADOS
+
+-- INSERIR EMPREGADOS
+INSERT INTO Empregado (EmpNome, EmpTelefone, EmpEmail, EmpCpf, EmpDataNascimento)
+VALUES 
+('Maria Eduarda', '11987456215', 'maria@gmail.com', '12943269562', CONVERT(DATETIME, '24/02/2005', 103)),
+('Yan Almeida S', '11987536425', 'yan@email.com', '13694558452', CONVERT(DATETIME, '05/05/2006', 103));
+
+-- Produtos
+INSERT INTO Produto (ProNome, ProCodigoBarras)
+VALUES 
+('Blusa Amarela', '000123456'),
+('Calça Azul', '0000654321');
+
+-- Produção
+INSERT INTO Producao (EmpCodigoEmpregado, DataProducao, Quantidade)
+VALUES 
+(1, '2025-05-20', 50),
+(1, '2025-02-03', 16),
+(2, '2025-04-10', 60),
+(2, '2025-05-18', 5);
+
+-- ProducaoProduto
+INSERT INTO ProducaoProduto (CodigoProduto, CodigoProducao)
+VALUES
+(1, 1), -- Camisa Amarela produzido por Maria em Maio
+(1, 2), -- Camisa Amarela produzido por Maria em Fevereiro
+(2, 3), -- Calça Azul produzido por Yan em Abril
+(2, 4); -- Calça Azul produzida por Yan em Maio
+
+SELECT * FROM Producao;
+SELECT * FROM Produto;
+SELECT * FROM ProducaoProduto;
+SELECT * FROM Empregado;
+
+
+USE Fabrica;
+GO
+
+SELECT * FROM Empregado;
+SELECT * FROM Produto;
+SELECT * FROM Producao;
+SELECT * FROM ProducaoProduto;
